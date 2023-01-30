@@ -9,8 +9,11 @@
 </head>
 
 <body>
+    <audio id="lydRiktigSvar" src="C:/Users/helgeul/OneDrive%20-%20Viken%20fylkeskommune/Arkiv/IT2/2020-21/JS/Applaus1.mp3"></audio>
     <h1 id="sporsmaal">Her er spørsmålet</h1>
     <input id="inpSvar" type="text">
+    <input id="inpNyttSpmSvar" type="text" hidden="true">
+    <button id="btnAdmin">Bli admin</button>
     <h5 id="alternativ1">Alt1</h5>
     <h5 id="alternativ2">Alt2</h5>
     <h5 id="alternativ3">Alt3</h5>
@@ -25,24 +28,31 @@
         var alternativ1 = document.getElementById("alternativ1");
         var alternativ2 = document.getElementById("alternativ2");
         var alternativ3 = document.getElementById("alternativ3");
+        var lydRiktigSvar = document.getElementById("lydRiktigSvar");
 
         var inpSvar = document.getElementById("inpSvar");
+        var inpNyttSpmSvar = document.getElementById("inpNyttSpmSvar");
         var btnOK = document.getElementById("btnOK");
         var btnNeste = document.getElementById("btnNeste");
         var btnForrige = document.getElementById("btnForrige");
         var imgBilde = document.getElementById("imgBilde");
+        var btnAdmin = document.getElementById("btnAdmin");
         var spmNr = 0;
         btnForrige.disabled = true;
 
         var spmOgSvar = [
-            { q: "Hva heter norges høyeste fjell?", a1: "Alt1: Galdhøpiggen", a2: "Alt2: Glittertind", a3: "Store Skagastølstind", riktig: "1", bilde: "bilder/Galdhøpiggen.jpg" },
-            { q: "Hvor høy er Mount Everest?", a1: "2848 m", a2: "4848 m", a3: "8848 m", riktig: "3", bilde: "bilder/MountEverest.jpg" },
-            { q: "Hva er fornavnet statsministeren i Norge?", a1: "Jonas", a2: "Ronny", a3: "Pelle", riktig: "1", bilde: "bilder/Jonas.jpg" }
+            { q: "Hva heter norges høyeste fjell?", a1: "1: Galdhøpiggen", a2: "2: Glittertind", a3: "3:Store Skagastølstind", riktig: "1", bilde: "bilder/Galdhøpiggen.jpg" },
+            { q: "Hvor høy er Mount Everest?", a1: "1: 2848 m", a2: "2: 4848 m", a3: "3: 8848 m", riktig: "3", bilde: "bilder/MountEverest.jpg" },
+            { q: "Hva er fornavnet statsministeren i Norge?", a1: "1: Jonas", a2: "2: Ronny", a3: "3: Pelle", riktig: "1", bilde: "bilder/Jonas.jpg" },
+            { q: "Hvem vant kvartfinalen i går i Håndball VM?", riktig: "Spania", a1:"", a2:"",a3:"" ,bilde: "" }
         ]
 
         function settOppSkjermbilde() {
             sporsmaal.innerHTML = spmOgSvar[spmNr].q;
             imgBilde.src = spmOgSvar[spmNr].bilde;
+            if(spmOgSvar[spmNr].bilde == "") {
+                imgBilde.alt = "";
+            }
             alternativ1.innerHTML = spmOgSvar[spmNr].a1;
             alternativ2.innerHTML = spmOgSvar[spmNr].a2;
             alternativ3.innerHTML = spmOgSvar[spmNr].a3;
@@ -52,8 +62,9 @@
         settOppSkjermbilde();
 
         function sjekkSvar() {
-            if (inpSvar.value.toLowerCase() == spmOgSvar[spmNr].a.toLowerCase()) {
+            if (inpSvar.value.toLowerCase() == spmOgSvar[spmNr].riktig.toLowerCase()) {
                 alert("Supert, du er et geni!")
+                lydRiktigSvar.play();
             }
             else {
                 alert("Du er ikke et geni ennå")
@@ -84,7 +95,39 @@
             }
         }
         btnForrige.addEventListener("click", forrigeSpm);
+
+        function adminFunksjoner() {
+            btnAdmin.innerHTML = "Tilbake til vanlig svarmodus";
+            btnAdmin.removeEventListener("click", adminFunksjoner);
+            btnAdmin.addEventListener("click", normalFunksjoner);
+            inpNyttSpmSvar.hidden=false;
+            sporsmaal.innerHTML = "Skriv nytt spørsmål i første inputfelt, riktig svar i andre";
+            inpSvar.placeholder = "Spørsmål";
+            inpNyttSpmSvar.placeholder = "Svar";
+            alternativ1.hidden = true;
+            alternativ2.hidden = true;
+            alternativ3.hidden = true;
+            imgBilde.src="";
+            imgBilde.alt="";
+            btnForrige.hidden=true;
+            btnNeste.hidden=true;
+            btnOK.removeEventListener("click", sjekkSvar);
+            btnOK.addEventListener("click", leggInnNyttSpm);
+            btnOK.innerHTML = "Legg inn spørsmålet";
+        }
+
+        function normalFunksjoner() {
+            alert("her må jeg skrive alt som skal til for å sette tilbake til vanlig modus")
+            alert("forresten, Nå er det " + spmOgSvar.length + " spørmål i arrayen")               
+        }
+
+        function leggInnNyttSpm() {
+            //gjør alt som trengs for å legge til et nytt spm
+            var nyttSpm = {q: inpSvar.value, riktig: inpNyttSpmSvar.value, a1:"", a2:"",a3:"" ,bilde: "" };
+            spmOgSvar.push(nyttSpm);
+        }
+        btnAdmin.addEventListener("click", adminFunksjoner);
+        
     </script>
 </body>
-
 </html>
