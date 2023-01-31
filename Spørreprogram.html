@@ -11,9 +11,9 @@
 <body>
     <audio id="lydRiktigSvar" src="C:/Users/helgeul/OneDrive%20-%20Viken%20fylkeskommune/Arkiv/IT2/2020-21/JS/Applaus1.mp3"></audio>
     <h1 id="sporsmaal">Her er spørsmålet</h1>
-    <input id="inpSvar" type="text">
-    <input id="inpNyttSpmSvar" type="text" hidden="true">
-    <button id="btnAdmin">Bli admin</button>
+    <input id="inpSvar" type="text" placeholder="Skriv svaret">
+    <input id="inpNyttSpmSvar" type="text" hidden=true>
+    <button id="btnAdmin" hidden="true">Bli admin</button>
     <h5 id="alternativ1">Alt1</h5>
     <h5 id="alternativ2">Alt2</h5>
     <h5 id="alternativ3">Alt3</h5>
@@ -23,7 +23,7 @@
     <button id="btnNeste">Neste</button>
     <br><br>
     <img id="imgBilde" src="" width=200px alt="Fant ikke bildet">
-    <script>
+    <script> 
         var sporsmaal = document.getElementById("sporsmaal");
         var alternativ1 = document.getElementById("alternativ1");
         var alternativ2 = document.getElementById("alternativ2");
@@ -53,9 +53,16 @@
             if(spmOgSvar[spmNr].bilde == "") {
                 imgBilde.alt = "";
             }
+            alternativ1.hidden = false;
+            alternativ2.hidden = false;
+            alternativ3.hidden = false;
+            btnForrige.hidden=false;
+            btnNeste.hidden=false;
             alternativ1.innerHTML = spmOgSvar[spmNr].a1;
             alternativ2.innerHTML = spmOgSvar[spmNr].a2;
             alternativ3.innerHTML = spmOgSvar[spmNr].a3;
+            inpSvar.value = "";
+            inpNyttSpmSvar.value = "";
         }
 
         //initiering av det første spørsmål:
@@ -117,8 +124,16 @@
         }
 
         function normalFunksjoner() {
-            alert("her må jeg skrive alt som skal til for å sette tilbake til vanlig modus")
-            alert("forresten, Nå er det " + spmOgSvar.length + " spørmål i arrayen")               
+            inpSvar.placeholder = "Skriv Svaret";
+            inpNyttSpmSvar.hidden = true;
+            btnAdmin.innerHTML = "Bli admin";
+            btnAdmin.removeEventListener("click", normalFunksjoner);
+            btnAdmin.addEventListener("click", adminFunksjoner);
+            btnOK.innerHTML = "Klikk når du er klar";
+            btnOK.removeEventListener("click", leggInnNyttSpm);
+            btnOK.addEventListener("click", sjekkSvar);
+            settOppSkjermbilde();
+            btnAdmin.hidden=true;
         }
 
         function leggInnNyttSpm() {
@@ -127,6 +142,14 @@
             spmOgSvar.push(nyttSpm);
         }
         btnAdmin.addEventListener("click", adminFunksjoner);
+
+        function knappeTrykk(evt) {
+            var tallkode = evt.keyCode;
+            if(tallkode == 66){  // du har trykket "b"
+                btnAdmin.hidden=false;
+            }
+        }
+        document.addEventListener("keydown",knappeTrykk);
         
     </script>
 </body>
