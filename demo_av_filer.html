@@ -14,7 +14,7 @@
         var bilde = document.getElementById("bilde")
         
         function velgFil() {
-            var aktueltFilNavn = inpFilNavn.files[0].name;
+            var aktueltFilNavn = URL.createObjectURL(inpFilNavn.files[0]);
             alert(aktueltFilNavn)
             bilde.src=aktueltFilNavn;
         }
